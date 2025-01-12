@@ -1,6 +1,7 @@
 require("dotenv").config();
 const { Client, GatewayIntentBits } = require("discord.js");
 const { registerCommands } = require("./commands");
+const { handleSubmit } = require("./handle-commands/submit");
 
 const client = new Client({
   intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages],
@@ -9,9 +10,9 @@ const client = new Client({
 // Event listener for commands
 client.on("interactionCreate", async (int) => {
   try {
-    if (!int.isCommand()) return;
     switch (int.commandName) {
       case "submit":
+        await handleSubmit(int);
         break;
 
       default:
@@ -24,7 +25,7 @@ client.on("interactionCreate", async (int) => {
 
 client.once("ready", async (bot) => {
   console.log(bot.user.username + " is online!");
-  await registerCommands(client);
+  // await registerCommands(client);
 });
 
 client.login(process.env.token);

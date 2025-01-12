@@ -30,10 +30,12 @@ db.run(`CREATE TABLE IF NOT EXISTS results (
             event_id INTEGER,
             guild_id TEXT,
             user_id TEXT,
+            user_name TEXT,
             result_average INTEGER,
             result_best INTEGER,
             FOREIGN KEY (event_id) REFERENCES events(event_id),
-            FOREIGN KEY (guild_id) REFERENCES guilds(guild_id)
+            FOREIGN KEY (guild_id) REFERENCES guilds(guild_id),
+            UNIQUE(event_id, guild_id, user_id)
   )`);
 
 async function saveData(query, parameters) {
