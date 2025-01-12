@@ -10,7 +10,12 @@ const db = new sqlite3.Database(
 db.run(`
         CREATE TABLE IF NOT EXISTS guilds (
             guild_id TEXT PRIMARY KEY UNIQUE,
-            guild_name TEXT
+            guild_name TEXT,
+            scramble_channel TEXT,
+            results_channel TEXT,
+            submit_channel TEXT,
+            role_id TEXT,
+            cron TEXT
         )
     `);
 

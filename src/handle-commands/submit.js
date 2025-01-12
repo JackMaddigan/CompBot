@@ -44,10 +44,7 @@ async function handleSubmit(int, member = int.member) {
   const correctAttemptsQuantity = pendingSolves.length === eventAttempts;
 
   if (invalidSolves.length > 0 || !correctAttemptsQuantity) {
-    let text =
-      invalidSolves.length > 0
-        ? `${invalidSolves.join(", ")} are not valid times!`
-        : "";
+    let text = invalidSolves.length > 0 ? invalidSolves.join("\n") : "";
     text += !correctAttemptsQuantity
       ? `\nInvalid number of solves!\nExpected: ${eventAttempts},\nReceived: ${pendingSolves.length}`
       : "";
@@ -66,12 +63,12 @@ async function handleSubmit(int, member = int.member) {
   const response = result.getResponse();
   await int.reply({
     content: response,
-    flags: int.member.id === member.id ? 64 : 0,
+    flags: int.member.id !== member.id ? 64 : 0,
   });
 
   // save
   await saveData(
-    `INSERT INTO results (event_id, guild_id, user_id, user_name, result_average, result_best) VALUES (?, ?, ?, ?, ?, ?) ON CONFLICT(event_id, guild_id, user_id) DO UPDATE SET result_average=excluded.average, result_best=excluded.best`,
+    `INSERT INTO results (event_id, guild_id, user_id, user_name, result_average, result_best) VALUES (?, ?, ?, ?, ?, ?) ON CONFLICT(event_id, guild_id, user_id) DO UPDATE SET result_average=excluded.result_average, result_best=excluded.result_best`,
     [
       eventId,
       int.guild.id,

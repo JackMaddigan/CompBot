@@ -6,18 +6,19 @@ class AoN {
   solves;
 
   calculateStats(solves) {
-    solves = solves.slice().map((solve) => centi(solve));
+    this.solves = solves.slice().map((solve) => centi(solve));
 
-    this.solves = solves
+    const orderedFilteredSolves = this.solves
       .slice()
       .sort((a, b) => a - b)
       .filter((item) => item > 0);
 
-    this.best = this.solves.length === 0 ? -1 : this.solves[0];
+    this.best =
+      orderedFilteredSolves.length === 0 ? -1 : orderedFilteredSolves[0];
     const trim = Math.ceil(0.05 * solves.length);
-    const isDnfAvg = solves.length - this.solves.length > trim;
-    const countingSolves = this.solves
-      .concat(Array(solves.length - this.solves.length).fill(-1))
+    const isDnfAvg = solves.length - orderedFilteredSolves.length > trim;
+    const countingSolves = orderedFilteredSolves
+      .concat(Array(solves.length - orderedFilteredSolves.length).fill(-1))
       .splice(trim, solves.length - 1 - trim);
 
     this.average = isDnfAvg

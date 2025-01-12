@@ -1,4 +1,8 @@
-const { SlashCommandBuilder, PermissionsBitField } = require("discord.js");
+const {
+  SlashCommandBuilder,
+  PermissionsBitField,
+  ChannelType,
+} = require("discord.js");
 const { formats } = require("./formats");
 
 async function registerCommands(client) {
@@ -70,28 +74,80 @@ async function registerCommands(client) {
       .setName("setup")
       .setDescription("Set up channels and time")
       .setDefaultMemberPermissions(PermissionsBitField.Flags.KickMembers)
-      .addStringOption((option) =>
+      .addChannelOption((option) =>
         option
-          .setName("scramble-channel-id")
+          .setName("scramble-channel")
           .setRequired(true)
-          .setDescription("ID of the channel the bot will send scrambles to")
+          .setDescription("ID of the channel the bot will send scrambles to.")
+          .addChannelTypes(ChannelType.GuildText)
       )
-      .addStringOption((option) =>
+      .addChannelOption((option) =>
         option
-          .setName("results-channel-id")
+          .setName("results-channel")
           .setRequired(true)
-          .setDescription("ID of the channel the bot will send results to")
+          .setDescription("The channel the bot will send results to.")
+          .addChannelTypes(ChannelType.GuildText)
       )
-
+      .addChannelOption((option) =>
+        option
+          .setName("submit-channel")
+          .setRequired(true)
+          .setDescription(
+            "The channel the bot will send the new week number to."
+          )
+          .addChannelTypes(ChannelType.GuildText)
+      )
       .addIntegerOption((option) =>
         option
-          .setName("time")
-          .setDescription(
-            "When to send results and scrambles in 4-digit time in your timezone. Eg. 2330 is 11:30pm."
-          )
+          .setName("time-hour")
+          .setDescription("Hour in UTC to run comp at")
           .setRequired(true)
-          .setMaxValue(2359)
+          .setMaxValue(23)
           .setMinValue(0)
+      )
+      .addIntegerOption((option) =>
+        option
+          .setName("time-minute")
+          .setDescription("Minute in UTC to run comp at")
+          .setRequired(true)
+          .setMaxValue(59)
+          .setMinValue(0)
+      )
+      .addIntegerOption((option) =>
+        option
+          .setName("time-day")
+          .setDescription("Day in UTC to run comp at")
+          .setRequired(true)
+          .setChoices(
+            {
+              name: "Sunday",
+              value: 0,
+            },
+            {
+              name: "Monday",
+              value: 1,
+            },
+            {
+              name: "Tuesday",
+              value: 2,
+            },
+            {
+              name: "Wednesday",
+              value: 3,
+            },
+            {
+              name: "Thursday",
+              value: 4,
+            },
+            {
+              name: "Friday",
+              value: 5,
+            },
+            {
+              name: "Saturday",
+              value: 6,
+            }
+          )
       )
       .addRoleOption((option) =>
         option
@@ -111,12 +167,15 @@ async function registerCommands(client) {
           .setName("event-name")
           .setRequired(true)
           .setDescription("Name of the event")
+          .setMaxLength(16)
       )
       .addIntegerOption((option) =>
         option
           .setName("attempts")
           .setRequired(true)
           .setDescription("The number of attempts")
+          .setMaxValue(25)
+          .setMinValue(1)
       )
       .addStringOption((option) =>
         option
@@ -137,7 +196,7 @@ async function registerCommands(client) {
     const removeEventCommand = new SlashCommandBuilder()
       .setName("remove-event")
       .setDescription("Remove an event from the weekly comp")
-      .addStringOption((option) =>
+      .addIntegerOption((option) =>
         option
           .setName("event-id")
           .setRequired(true)
