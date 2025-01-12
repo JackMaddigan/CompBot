@@ -8,29 +8,33 @@ const db = new sqlite3.Database(
 );
 
 db.run(`
-        CREATE TABLE IF NOT EXISTS results (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            guildId TEXT NOT NULL,
-            userId TEXT NOT NULL,
-            username TEXT NOT NULL,
-            eventId TEXT NOT NULL,
-            attempts TEXT NOT NULL,
-            best INTEGER,
-            average INTEGER,
-            UNIQUE(guildId, userId, eventId)
+        CREATE TABLE IF NOT EXISTS guilds (
+            guild_id TEXT PRIMARY KEY UNIQUE,
+            guild_name TEXT
         )
     `);
 
 db.run(`
-        CREATE TABLE IF NOT EXISTS guilds (
-            guildId TEXT PRIMARY KEY UNIQUE,
-            events TEXT,
-            resultsChannelId,
-            scramblesChannelId,
-            botChannelId,
-            cron
+        CREATE TABLE IF NOT EXISTS events (
+            event_id INTEGER PRIMARY KEY AUTOINCREMENT,
+            event_name TEXT,
+            event_format TEXT,
+            event_attempts INTEGER,
+            guild_id TEXT,
+            FOREIGN KEY (guild_id) REFERENCES guilds(guild_id)
         )
     `);
+
+db.run(`CREATE TABLE IF NOT EXISTS results (
+            result_id INTEGER PRIMARY KEY AUTOINCREMENT,
+            event_id INTEGER,
+            guild_id TEXT,
+            user_id TEXT,
+            result_average INTEGER,
+            result_best INTEGER,
+            FOREIGN KEY (event_id) REFERENCES events(event_id),
+            FOREIGN KEY (guild_id) REFERENCES guilds(guild_id)
+  )`);
 
 async function saveData(query, parameters) {
   try {

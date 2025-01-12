@@ -8,7 +8,18 @@ const client = new Client({
 
 // Event listener for commands
 client.on("interactionCreate", async (int) => {
-  if (!int.isCommand()) return;
+  try {
+    if (!int.isCommand()) return;
+    switch (int.commandName) {
+      case "submit":
+        break;
+
+      default:
+        break;
+    }
+  } catch (error) {
+    console.error("Error handling command", error);
+  }
 });
 
 client.once("ready", async (bot) => {
