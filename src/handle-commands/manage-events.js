@@ -38,8 +38,6 @@ async function removeEvent(int) {
     [eventId, int.guild.id]
   );
 
-  await Promise.all([deleteResults, deleteEvent]);
-
   await int.reply({
     content: "Deleted",
     flags: 64,

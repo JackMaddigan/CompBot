@@ -1,9 +1,15 @@
 const { centi, display } = require("../helpers");
 
 class AoN {
-  average;
-  best;
-  solves;
+  constructor(r) {
+    if (r) {
+      this.id = r.result_id;
+      this.userId = r.user_id;
+      this.username = r.user_name;
+      this.average = r.result_average;
+      this.best = r.result_best;
+    }
+  }
 
   calculateStats(solves) {
     this.solves = solves.slice().map((solve) => centi(solve));
@@ -37,6 +43,19 @@ class AoN {
     return `(${this.solves
       .map((solve) => display(solve))
       .join(", ")}) = ${display(this.average)} ao${this.solves.length}`;
+  }
+
+  compare(behind) {
+    if (this.best <= 0 && behind.best > 0) {
+      return 1; // should be after behind
+    }
+    if (this.best > 0 && behind.best <= 0) {
+      return -1; // should stay in front
+    }
+    if (this.average === behind.average) {
+      return this.best - behind.best; // tiebreak on single
+    }
+    return this.average - behind.average; // sort by average
   }
 }
 
