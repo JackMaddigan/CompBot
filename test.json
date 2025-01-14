@@ -3,12 +3,24 @@
     "event_name": "3x3",
     "event_format": "aon",
     "event_attempts": 5,
-    "scramble": ["333", 0]
+    "scramble": "333"
   },
   {
     "event_name": "2x2",
     "event_format": "aon",
     "event_attempts": 5,
-    "scramble": ["222so", 0]
+    "scramble": "222so"
+  },
+  {
+    "event_name": "4x4",
+    "event_format": "aon",
+    "event_attempts": 5,
+    "scramble": "444wca"
+  },
+  {
+    "event_name": "3bld",
+    "event_format": "bon",
+    "event_attempts": 3,
+    "scramble": "333ni"
   }
 ]

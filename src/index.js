@@ -54,7 +54,11 @@ client.on("interactionCreate", async (int) => {
 
 client.once("ready", async (bot) => {
   console.log(bot.user.username + " is online!");
-  // await handleComp("1140194673403646042");
+  try {
+    await handleComp("1140194673403646042");
+  } catch (error) {
+    console.error(error);
+  }
 
   // await registerCommands(client);
 });

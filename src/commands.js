@@ -197,22 +197,21 @@ async function registerCommands(client) {
           .setName("scramble-type")
           .setDescription("The type of scramble to be sent.")
           .setChoices(
-            { name: "3x3x3", value: "333 0" },
-            { name: "2x2x2", value: "222so 0" },
-            { name: "4x4x4", value: "444wca 0" },
-            { name: "5x5x5", value: "555wca 60" },
-            { name: "6x6x6", value: "666wca 80" },
-            { name: "7x7x7", value: "777wca 100" },
-            { name: "3x3 bld", value: "333ni 0" },
-            { name: "3x3 fm", value: "333fm 0" },
-            { name: "3x3 oh", value: "333 0" },
-            { name: "clock", value: "clkwca 0" },
-            { name: "megaminx", value: "mgmp 70" },
-            { name: "pyraminx", value: "pyrso 10" },
-            { name: "skewb", value: "skbso 0" },
-            { name: "sq1", value: "sqrs 0" },
-            { name: "4x4 bld", value: "444bld 40" },
-            { name: "5x5 bld", value: "555bld 60" }
+            { name: "3x3x3", value: "333" },
+            { name: "2x2x2", value: "222so" },
+            { name: "4x4x4", value: "444wca" },
+            { name: "5x5x5", value: "555wca" },
+            { name: "6x6x6", value: "666wca" },
+            { name: "7x7x7", value: "777wca" },
+            { name: "3x3 bld", value: "333ni" },
+            { name: "3x3 fm", value: "333fm" },
+            { name: "clock", value: "clkwca" },
+            { name: "megaminx", value: "mgmp" },
+            { name: "pyraminx", value: "pyrso" },
+            { name: "skewb", value: "skbso" },
+            { name: "sq1", value: "sqrs" },
+            { name: "4x4 bld", value: "444bld" },
+            { name: "5x5 bld", value: "555bld" }
           )
       );
 

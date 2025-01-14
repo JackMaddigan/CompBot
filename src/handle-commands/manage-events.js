@@ -1,6 +1,6 @@
 const { readData, saveData, deleteData } = require("../db");
 const { formats } = require("../formats");
-const { scrambleArgs } = require("../scramble-args");
+const scrambleArgs = require("../scramble-args.json");
 
 async function addEvent(int) {
   const events = await readData(`SELECT * FROM events WHERE guild_id=?`, [
@@ -63,12 +63,7 @@ async function listEvents(int) {
   const text =
     events.length === 0
       ? "This server has no events!"
-      : events
-          .map(
-            (e) =>
-              `${e.event_id} ${e.event_name} ${e.event_format} ${e.event_attempts}`
-          )
-          .join("\n");
+      : JSON.stringify(events, null, 2);
 
   await int.reply({
     content: text,
@@ -118,7 +113,7 @@ async function setEventsJson(int) {
           event.event_name,
           event.event_format,
           event.event_attempts,
-          event.scramble.join(" "),
+          event.scramble,
           int.guild.id,
         ]
       );
@@ -156,11 +151,7 @@ function validateEventAttempts(event) {
 }
 
 function validateScrambleArgs(event) {
-  if (!Array.isArray(event.scramble) || event.scramble?.length !== 2) {
-    return false;
-  }
-  const [a, b] = event.scramble;
-  return scrambleArgs[a] === b;
+  return Object.keys(scrambleArgs).includes(event.scramble);
 }
 
 module.exports = {

@@ -20,7 +20,7 @@ async function handleSetup(int) {
     flags: 64,
   });
   await saveData(
-    `INSERT INTO guilds (guild_id, guild_name, scramble_channel, results_channel, submit_channel, role_id, cron) VALUES (?, ?, ?, ?, ?, ?, ?) ON CONFLICT(guild_id) DO UPDATE SET guild_name=excluded.guild_name, scramble_channel=excluded.scramble_channel, results_channel=excluded.results_channel, submit_channel=excluded.submit_channel, role_id=excluded.role_id, cron=excluded.cron`,
+    `INSERT INTO guilds (guild_id, guild_name, scramble_channel, results_channel, submit_channel, role_id, cron, week) VALUES (?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT(guild_id) DO UPDATE SET guild_name=excluded.guild_name, scramble_channel=excluded.scramble_channel, results_channel=excluded.results_channel, submit_channel=excluded.submit_channel, role_id=excluded.role_id, cron=excluded.cron, week=excluded.week`,
     [
       int.guild.id,
       int.guild.name,
@@ -29,6 +29,7 @@ async function handleSetup(int) {
       submitChannel.id,
       role?.id || null,
       cronExp,
+      0,
     ]
   );
 }

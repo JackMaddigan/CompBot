@@ -7,17 +7,19 @@ async function handleSubmitFor(int) {
 }
 
 async function handleSubmit(int, member = int.member) {
-  const subEventName = int.options.getString("event").toLowerCase();
-  const subText = int.options.getString("results");
+  const subEventName = int.options.getString("event").trim();
+  const subText = int.options.getString("results").trim();
 
   // check that eventName is valid for the guild
   const {
     event_id: eventId,
+    event_name: eventName,
     event_format: eventFormat,
     event_attempts: eventAttempts,
   } = (
     await readData(
-      `SELECT event_id, event_name, event_format, event_attempts FROM events WHERE guild_id=? AND event_name=?`,
+      `SELECT event_id, event_name, event_format, event_attempts FROM events WHERE guild_id=? AND event_name COLLATE NOCASE LIKE ? || '%' LIMIT 1
+`,
       [int.guild.id, subEventName]
     )
   )[0] || {};
@@ -61,7 +63,7 @@ async function handleSubmit(int, member = int.member) {
   // reply
   const response = result.getResponse();
   await int.reply({
-    content: `${response} for ${subEventName}`,
+    content: `${response} for ${eventName}`,
     flags: int.member.id !== member.id ? 64 : 0,
   });
 
