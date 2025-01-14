@@ -3,14 +3,12 @@ const { getRankedResults } = require("../comp/results");
 
 async function handleCr(int) {
   const data = await getRankedResults(int.guild.id);
-  console.log(data);
   const lines = [];
-  for (const [, event] of Object.entries(data)) {
-    const eventResults = event.results;
-    if (eventResults.length === 0) continue;
+  for (const results of Object.values(data)) {
+    if (results.length === 0) continue;
     lines.push(
-      `**${event.eventData.event_name}**`,
-      ...eventResults.slice(0, 10).map((r) => r.toCr())
+      `**${results[0]?.eventName}**`,
+      ...results.slice(0, 10).map((r) => r.toCr())
     );
   }
 

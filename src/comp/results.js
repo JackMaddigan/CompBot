@@ -3,41 +3,37 @@ const { formats } = require("../formats");
 
 async function getRankedResults(guildId) {
   // fetch all results from db
-  const resultsData = await readData(`SELECT * FROM results WHERE guild_id=?`, [
-    guildId,
-  ]);
-
-  // fetch all events from db
-  const eventsData = (
-    await readData(`SELECT * FROM events WHERE guild_id=?`, [guildId])
-  ).reduce((acc, cur) => {
-    acc[cur.event_id] = cur;
-    return acc;
-  }, {});
+  const resultsData = await readData(
+    `SELECT 
+    results.result_id, results.event_id, results.user_id, results.user_name, results.result_average, results.result_best,
+    events.event_name, events.event_format, events.event_attempts
+FROM 
+    results
+INNER JOIN 
+    events 
+ON 
+    results.event_id = events.event_id
+WHERE 
+    results.guild_id = ?`,
+    [guildId]
+  );
 
   // Return null if no events or results
-  if (resultsData.length === 0 || eventsData.length === 0) {
+  if (resultsData.length === 0) {
     return null;
   }
 
   // make array with a key for each event id
-  const eventArrays = Object.keys(eventsData).reduce((acc, cur) => {
-    acc[cur] = {
-      results: [],
-      eventData: eventsData[cur],
-    };
-    return acc;
-  }, {});
+  const eventArrays = {};
 
   // add result objects to the event arrays
   for (const r of resultsData) {
-    eventArrays[r.event_id].results.push(
-      new formats[eventsData[r.event_id].event_format].class(r)
-    );
+    if (!eventArrays[r.event_id]) eventArrays[r.event_id] = [];
+    eventArrays[r.event_id].push(new formats[r.event_format].class(r));
   }
 
   // sort and give placings
-  for (const { results } of Object.values(eventArrays)) {
+  for (const results of Object.values(eventArrays)) {
     if (results.length === 0) continue;
     results.sort((a, b) => a.compare(b));
     results[0].setRank(1);

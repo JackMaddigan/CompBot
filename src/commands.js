@@ -196,23 +196,6 @@ async function registerCommands(client) {
         option
           .setName("scramble-type")
           .setDescription("The type of scramble to be sent.")
-          .setChoices(
-            { name: "3x3x3", value: "333" },
-            { name: "2x2x2", value: "222so" },
-            { name: "4x4x4", value: "444wca" },
-            { name: "5x5x5", value: "555wca" },
-            { name: "6x6x6", value: "666wca" },
-            { name: "7x7x7", value: "777wca" },
-            { name: "3x3 bld", value: "333ni" },
-            { name: "3x3 fm", value: "333fm" },
-            { name: "clock", value: "clkwca" },
-            { name: "megaminx", value: "mgmp" },
-            { name: "pyraminx", value: "pyrso" },
-            { name: "skewb", value: "skbso" },
-            { name: "sq1", value: "sqrs" },
-            { name: "4x4 bld", value: "444bld" },
-            { name: "5x5 bld", value: "555bld" }
-          )
       );
 
     const removeEventCommand = new SlashCommandBuilder()

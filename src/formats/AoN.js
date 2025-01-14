@@ -7,6 +7,8 @@ class AoN {
       this.id = r.result_id;
       this.userId = r.user_id;
       this.username = r.user_name;
+      this.eventName = r.event_name;
+      this.attempts = r.event_attempts;
       this.average = r.result_average;
       this.best = r.result_best;
       this.isDnf = this.best <= 0;
@@ -72,10 +74,14 @@ class AoN {
     return `#${this.rank} ${this.username} ${display(this.average)}`;
   }
 
+  toView() {
+    return `avg: ${display(this.average)}\nbest: ${display(this.best)}`;
+  }
+
   toPodiumString() {
     return `${emojis.medals[this.rank - 1]} <@${this.userId}> ${display(
       this.average
-    )}`;
+    )} ao${this.attempts}`;
   }
 }
 

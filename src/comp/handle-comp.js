@@ -11,8 +11,6 @@ async function handleComp(guildId) {
     await readData(`SELECT * FROM guilds WHERE guild_id=?`, [guildId])
   )?.[0];
 
-  console.log(guildInfo);
-
   if (!guildInfo) {
     return console.warn("Cannot handle comp which is not set up.");
   }
@@ -53,17 +51,16 @@ WHERE guild_id=?`,
 }
 
 async function sendPodiums(resultsChannel, resultsData, week) {
+  if (!resultsData) return; // null if there is no results
   await resultsChannel.send(`Week ${week} results!`);
-  for (const value of Object.values(resultsData)) {
-    let eventPodiumText = `**${value.eventData.event_name}**`;
-    console.log(value.results[0]?.isDnf);
-    if (value.results[0]?.isDnf || value.results.length === 0) continue;
-    for (const result of value.results) {
+  for (const results of Object.values(resultsData)) {
+    let eventPodiumText = `**${results[0]?.eventName}**`;
+    if (results[0]?.isDnf || results.length === 0) continue;
+    for (const result of results) {
       if (result.isDnf || result.placing > 3) break;
       // add to podium text
       eventPodiumText += `\n${result.toPodiumString()}`;
     }
-    console.log(eventPodiumText);
     await resultsChannel.send(eventPodiumText);
   }
 }

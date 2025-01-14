@@ -26,6 +26,13 @@ async function addEvent(int) {
     });
   }
 
+  if (!scrambleArgs.hasOwnProperty(scramble)) {
+    return await int.reply({
+      content: `Invalid scramble code.`,
+      flags: 64,
+    });
+  }
+
   await int.reply({
     content: `Added ${eventName}.`,
     flags: 64,

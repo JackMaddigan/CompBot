@@ -1,3 +1,4 @@
+const { handleComp } = require("../comp/handle-comp");
 const { saveData } = require("../db");
 const cron = require("node-cron");
 
@@ -12,7 +13,11 @@ async function handleSetup(int) {
 
   const cronExp = `${minute} ${hour} * * ${day}`;
   cron.schedule(cronExp, async () => {
-    // handle comp, pass the guild.id
+    try {
+      await handleComp(int.guild.id);
+    } catch (error) {
+      console.error("Error handling comp:", error);
+    }
   });
 
   await int.reply({
