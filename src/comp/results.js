@@ -1,7 +1,6 @@
 const { readData } = require("../db");
 const { formats } = require("../formats");
 
-getRankedResults("1140194673403646042");
 async function getRankedResults(guildId) {
   // fetch all results from db
   const resultsData = await readData(`SELECT * FROM results WHERE guild_id=?`, [
@@ -23,23 +22,35 @@ async function getRankedResults(guildId) {
 
   // make array with a key for each event id
   const eventArrays = Object.keys(eventsData).reduce((acc, cur) => {
-    acc[cur] = [];
+    acc[cur] = {
+      results: [],
+      eventData: eventsData[cur],
+    };
     return acc;
   }, {});
 
   // add result objects to the event arrays
   for (const r of resultsData) {
-    eventArrays[r.event_id].push(
+    eventArrays[r.event_id].results.push(
       new formats[eventsData[r.event_id].event_format].class(r)
     );
   }
 
-  // sort
-  for (const results of Object.values(eventArrays)) {
+  // sort and give placings
+  for (const { results } of Object.values(eventArrays)) {
+    if (results.length === 0) continue;
     results.sort((a, b) => a.compare(b));
+    results[0].setRank(1);
+    for (let i = 1; i < results.length; i++) {
+      results[i].setRank(
+        results[i - 1].compare(results[i]) === -1
+          ? i + 1
+          : results[i - 1].getRank()
+      );
+    }
   }
 
-  // give placings
-
-  console.log(eventArrays, eventsData);
+  return eventArrays;
 }
+
+module.exports = { getRankedResults };

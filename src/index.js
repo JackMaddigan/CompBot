@@ -1,5 +1,5 @@
 require("dotenv").config();
-const { Client, GatewayIntentBits } = require("discord.js");
+const client = require("./client");
 const { registerCommands } = require("./commands");
 const { handleSubmit, handleSubmitFor } = require("./handle-commands/submit");
 const { handleSetup } = require("./handle-commands/setup");
@@ -7,11 +7,11 @@ const {
   listEvents,
   addEvent,
   removeEvent,
+  setEventsJson,
 } = require("./handle-commands/manage-events");
-
-const client = new Client({
-  intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages],
-});
+const { handleCr } = require("./handle-commands/cr");
+const { handleView } = require("./handle-commands/view");
+const { handleComp } = require("./comp/handle-comp");
 
 // Event listener for commands
 client.on("interactionCreate", async (int) => {
@@ -35,6 +35,15 @@ client.on("interactionCreate", async (int) => {
       case "remove-event":
         await removeEvent(int);
         break;
+      case "cr":
+        await handleCr(int);
+        break;
+      case "view":
+        await handleView(int);
+        break;
+      case "set-events-json":
+        await setEventsJson(int);
+        break;
       default:
         break;
     }
@@ -45,6 +54,8 @@ client.on("interactionCreate", async (int) => {
 
 client.once("ready", async (bot) => {
   console.log(bot.user.username + " is online!");
+  // await handleComp("1140194673403646042");
+
   // await registerCommands(client);
 });
 

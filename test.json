@@ -1,0 +1,14 @@
+[
+  {
+    "event_name": "3x3",
+    "event_format": "aon",
+    "event_attempts": 5,
+    "scramble": ["333", 0]
+  },
+  {
+    "event_name": "2x2",
+    "event_format": "aon",
+    "event_attempts": 5,
+    "scramble": ["222so", 0]
+  }
+]

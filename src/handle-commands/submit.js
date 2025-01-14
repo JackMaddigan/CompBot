@@ -2,7 +2,6 @@ const { readData, saveData } = require("../db");
 const { formats } = require("../formats");
 
 async function handleSubmitFor(int) {
-  // can check later if it is submit for by comparing int.member.id to member.id
   const member = int.options.getMember("user");
   handleSubmit(int, member);
 }
@@ -62,21 +61,14 @@ async function handleSubmit(int, member = int.member) {
   // reply
   const response = result.getResponse();
   await int.reply({
-    content: response,
+    content: `${response} for ${subEventName}`,
     flags: int.member.id !== member.id ? 64 : 0,
   });
 
   // save
   await saveData(
     `INSERT INTO results (event_id, guild_id, user_id, user_name, result_average, result_best) VALUES (?, ?, ?, ?, ?, ?) ON CONFLICT(event_id, guild_id, user_id) DO UPDATE SET result_average=excluded.result_average, result_best=excluded.result_best`,
-    [
-      eventId,
-      int.guild.id,
-      int.member.id,
-      int.member.displayName,
-      average,
-      best,
-    ]
+    [eventId, int.guild.id, member.id, member.displayName, average, best]
   );
 }
 

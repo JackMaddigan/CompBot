@@ -15,7 +15,8 @@ db.run(`
             results_channel TEXT,
             submit_channel TEXT,
             role_id TEXT,
-            cron TEXT
+            cron TEXT,
+            week INTEGER
         )
     `);
 
@@ -25,6 +26,7 @@ db.run(`
             event_name TEXT,
             event_format TEXT,
             event_attempts INTEGER,
+            scramble TEXT,
             guild_id TEXT,
             FOREIGN KEY (guild_id) REFERENCES guilds(guild_id)
         )

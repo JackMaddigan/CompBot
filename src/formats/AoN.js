@@ -1,4 +1,5 @@
 const { centi, display } = require("../helpers");
+const emojis = require("../emojis.json");
 
 class AoN {
   constructor(r) {
@@ -8,6 +9,7 @@ class AoN {
       this.username = r.user_name;
       this.average = r.result_average;
       this.best = r.result_best;
+      this.isDnf = this.best <= 0;
     }
   }
 
@@ -56,6 +58,24 @@ class AoN {
       return this.best - behind.best; // tiebreak on single
     }
     return this.average - behind.average; // sort by average
+  }
+
+  setRank(rank) {
+    this.rank = rank;
+  }
+
+  getRank() {
+    return this.rank;
+  }
+
+  toCr() {
+    return `#${this.rank} ${this.username} ${display(this.average)}`;
+  }
+
+  toPodiumString() {
+    return `${emojis.medals[this.rank - 1]} <@${this.userId}> ${display(
+      this.average
+    )}`;
   }
 }
 
