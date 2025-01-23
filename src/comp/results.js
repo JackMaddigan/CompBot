@@ -38,11 +38,9 @@ WHERE
     results.sort((a, b) => a.compare(b));
     results[0].setRank(1);
     for (let i = 1; i < results.length; i++) {
-      results[i].setRank(
-        results[i - 1].compare(results[i]) === -1
-          ? i + 1
-          : results[i - 1].getRank()
-      );
+      const c = results[i - 1].compare(results[i]);
+      const rankToSet = c < 0 ? i + 1 : results[i - 1].getRank();
+      results[i].setRank(rankToSet);
     }
   }
 

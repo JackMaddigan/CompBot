@@ -17,13 +17,11 @@ function stopJob(guildId) {
 
 async function startAllJobs() {
   const data = await readData("SELECT guild_id, cron FROM guilds");
-  console.log(data);
   for (const item of data) {
     if (cron.validate(item?.cron)) {
       jobs.set(item.guild_id, makeJob(item.guild_id, item.cron));
     }
   }
-  console.log(jobs);
 }
 
 function makeJob(guildId, cronExp) {
