@@ -66,8 +66,7 @@ client.once("ready", async (bot) => {
   console.log(bot.user.username + " is online!");
   try {
     await startAllJobs();
-    // await registerCommands(client);
-    // await handleComp("1140194673403646042");
+    await registerCommands(client);
   } catch (error) {
     console.error(error);
   }
