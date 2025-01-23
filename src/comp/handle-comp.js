@@ -1,6 +1,7 @@
 const { readData, deleteData, saveData } = require("../db");
 const { getRankedResults } = require("./results");
 const scrambleArgs = require("../scramble-args.json");
+const fs = require("fs/promises");
 
 var cstimer = require("cstimer_module");
 const crypto = require("crypto");
@@ -15,7 +16,7 @@ async function handleComp(guildId) {
     return console.warn("Cannot handle comp which is not set up.");
   }
 
-  let week = guildInfo.week || 0;
+  let week = guildInfo.week || guildInfo.initial_week - 1 || 0;
 
   const eventsData = await readData(`SELECT * FROM events WHERE guild_id=?`, [
     guildId,
@@ -29,17 +30,25 @@ async function handleComp(guildId) {
   const scramblesChannel =
     client.channels.cache.get(guildInfo.scrambles_channel) ||
     (await client.channels.fetch(guildInfo.scramble_channel));
+  console.log(guildInfo);
 
-  if (week > 0) {
+  if (resultsData) {
     await sendPodiums(resultsChannel, resultsData, week);
-    // send results txt file
+    if (guildInfo.results_file) {
+      await sendResultsFile(
+        resultsChannel,
+        resultsData,
+        week,
+        guildInfo.guild_id
+      );
+    }
   }
-
-  week++;
-  await sendScrambles(scramblesChannel, eventsData, guildInfo.role_id, week);
 
   // delete all results
   //await deleteData(`DELETE FROM results WHERE guild_id=?`, [guildId]);
+
+  week++;
+  await sendScrambles(scramblesChannel, eventsData, guildInfo.role_id, week);
 
   // save new week
   await saveData(
@@ -79,6 +88,33 @@ async function sendScrambles(scramblesChannel, eventsData, roleId, week) {
       )}\n`;
     }
     await scramblesChannel.send(text);
+  }
+}
+
+async function sendResultsFile(resultsChannel, resultsData, week, guildId) {
+  try {
+    if (!resultsData) return; // null if there is no results
+    const eventsTexts = [];
+    for (const eventResults of Object.values(resultsData)) {
+      let text = "";
+      text += eventResults[0]?.eventName;
+      for (const result of eventResults) {
+        text += `\n${result.toCr()}`;
+      }
+      eventsTexts.push(text);
+    }
+
+    const path = `${guildId}_week${week}_results.txt`;
+
+    await fs.writeFile(path, eventsTexts.join("\n\n"));
+
+    await resultsChannel.send({
+      files: [path],
+    });
+
+    await fs.unlink(path);
+  } catch (error) {
+    console.error("Error sending results file:", error);
   }
 }
 

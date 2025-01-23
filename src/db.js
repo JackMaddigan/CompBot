@@ -16,7 +16,9 @@ db.run(`
             submit_channel TEXT,
             role_id TEXT,
             cron TEXT,
-            week INTEGER
+            week INTEGER,
+            results_file BOOLEAN,
+            initial_week INTEGER
         )
     `);
 

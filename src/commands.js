@@ -149,6 +149,20 @@ async function registerCommands(client) {
             }
           )
       )
+      .addBooleanOption((option) =>
+        option
+          .setName("results-txt-file")
+          .setDescription(
+            "Send a txt file with the podiums with the full results."
+          )
+          .setRequired(true)
+      )
+      .addIntegerOption((option) =>
+        option
+          .setName("start-week")
+          .setDescription("Initial week number for the next scrambles.")
+          .setMinValue(1)
+      )
       .addRoleOption((option) =>
         option
           .setName("comp-ping-role")
@@ -162,6 +176,7 @@ async function registerCommands(client) {
     const addEventCommand = new SlashCommandBuilder()
       .setName("add-event")
       .setDescription("Add an event to the competition")
+      .setDefaultMemberPermissions(PermissionsBitField.Flags.KickMembers)
       .addStringOption((option) =>
         option
           .setName("event-name")
@@ -201,6 +216,7 @@ async function registerCommands(client) {
     const removeEventCommand = new SlashCommandBuilder()
       .setName("remove-event")
       .setDescription("Remove an event from the weekly comp")
+      .setDefaultMemberPermissions(PermissionsBitField.Flags.KickMembers)
       .addIntegerOption((option) =>
         option
           .setName("event-id")
@@ -211,6 +227,7 @@ async function registerCommands(client) {
     const setEventsJsonCommand = new SlashCommandBuilder()
       .setName("set-events-json")
       .setDescription("Set the comp events with a json object.")
+      .setDefaultMemberPermissions(PermissionsBitField.Flags.KickMembers)
       .addStringOption((option) =>
         option
           .setName("json")

@@ -1,6 +1,7 @@
 require("dotenv").config();
 const client = require("./client");
 const { registerCommands } = require("./commands");
+const cron = require("node-cron");
 const { handleSubmit, handleSubmitFor } = require("./handle-commands/submit");
 const { handleSetup } = require("./handle-commands/setup");
 const {
@@ -12,6 +13,7 @@ const {
 const { handleCr } = require("./handle-commands/cr");
 const { handleView } = require("./handle-commands/view");
 const { handleComp } = require("./comp/handle-comp");
+const { startAllJobs } = require("./cron");
 
 // Event listener for commands
 client.on("interactionCreate", async (int) => {
@@ -55,6 +57,7 @@ client.on("interactionCreate", async (int) => {
 client.once("ready", async (bot) => {
   console.log(bot.user.username + " is online!");
   try {
+    await startAllJobs();
     // await registerCommands(client);
     // await handleComp("1140194673403646042");
   } catch (error) {
