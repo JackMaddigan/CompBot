@@ -45,7 +45,7 @@ async function handleComp(guildId) {
   }
 
   // delete all results
-  //await deleteData(`DELETE FROM results WHERE guild_id=?`, [guildId]);
+  await deleteData(`DELETE FROM results WHERE guild_id=?`, [guildId]);
 
   week++;
   await sendScrambles(scramblesChannel, eventsData, guildInfo.role_id, week);
@@ -66,7 +66,8 @@ async function sendPodiums(resultsChannel, resultsData, week) {
     let eventPodiumText = `**${results[0]?.eventName}**`;
     if (results[0]?.isDnf || results.length === 0) continue;
     for (const result of results) {
-      if (result.isDnf || result.placing > 3) break;
+      if (result.isDnf || result.rank > 3) break;
+      console.log(result);
       // add to podium text
       eventPodiumText += `\n${result.toPodiumString()}`;
     }

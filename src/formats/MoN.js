@@ -46,16 +46,15 @@ class MoN {
   }
 
   compare(behind) {
-    if (this.best <= 0 && behind.best > 0) {
-      return 1; // should be after behind
-    }
-    if (this.best > 0 && behind.best <= 0) {
-      return -1; // should stay in front
-    }
+    if (this.average <= 0 && behind.average > 0) return 1; // this should be worse
+    if (this.average > 0 && behind.average <= 0) return -1; // this stays in front
+
     if (this.average === behind.average) {
-      return this.best - behind.best; // tiebreak on single
+      if (this.best <= 0 && behind.best > 0) return 1; // this should be worse
+      if (this.best > 0 && behind.best <= 0) return -1; // this is better
+      return this.best - behind.best;
     }
-    return this.average - behind.average; // sort by average
+    return this.average - behind.average;
   }
 
   setRank(rank) {

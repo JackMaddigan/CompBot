@@ -5,10 +5,12 @@ const cron = require("node-cron");
 const jobs = new Map();
 
 function setJob(guildId, job) {
+  console.log("setting job for", guildId);
   jobs.set(guildId, job);
 }
 
 function stopJob(guildId) {
+  console.log("stopping job for", guildId);
   const job = jobs.get(guildId);
   if (!job) return;
   job.stop();
@@ -25,6 +27,7 @@ async function startAllJobs() {
 }
 
 function makeJob(guildId, cronExp) {
+  console.log("Making job", guildId, cronExp);
   return cron.schedule(cronExp, async () => {
     try {
       await handleComp(guildId);

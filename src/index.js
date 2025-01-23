@@ -14,6 +14,8 @@ const { handleCr } = require("./handle-commands/cr");
 const { handleView } = require("./handle-commands/view");
 const { handleComp } = require("./comp/handle-comp");
 const { startAllJobs } = require("./cron");
+const { stopComp, handleStopComp } = require("./stop-comp");
+const { handleHelp } = require("./handle-commands/help");
 
 // Event listener for commands
 client.on("interactionCreate", async (int) => {
@@ -46,6 +48,12 @@ client.on("interactionCreate", async (int) => {
       case "set-events-json":
         await setEventsJson(int);
         break;
+      case "help":
+        await handleHelp(int);
+        break;
+      case "stop-comp":
+        await handleStopComp(int);
+        break;
       default:
         break;
     }
@@ -63,6 +71,11 @@ client.once("ready", async (bot) => {
   } catch (error) {
     console.error(error);
   }
+});
+
+client.on("guildDelete", async (guild) => {
+  console.info("Left guild", guild.name, guild.id);
+  await stopComp(guild.id);
 });
 
 client.login(process.env.token);

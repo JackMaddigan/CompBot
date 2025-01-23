@@ -80,7 +80,9 @@ class AoN {
   toPodiumString() {
     return `${emojis.medals[this.rank - 1]} <@${this.userId}> ${display(
       this.average
-    )} ao${this.attempts}`;
+    )} ao${this.attempts}${
+      this.average <= 0 ? ` (${display(this.best)} single)` : ""
+    }`;
   }
 }
 

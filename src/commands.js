@@ -51,7 +51,7 @@ async function registerCommands(client) {
     const unsubmitCommand = new SlashCommandBuilder()
       .setName("unsubmit")
       .setDefaultMemberPermissions(PermissionsBitField.Flags.KickMembers)
-      .setDescription("Unsubmit results")
+      .setDescription("[ADMIN] Unsubmit results")
       .addUserOption((option) =>
         option.setName("user").setRequired(true).setDescription("The user")
       )
@@ -72,20 +72,20 @@ async function registerCommands(client) {
 
     const setupCommand = new SlashCommandBuilder()
       .setName("setup")
-      .setDescription("Set up channels and time")
+      .setDescription("[ADMIN] Set up channels and time")
       .setDefaultMemberPermissions(PermissionsBitField.Flags.KickMembers)
       .addChannelOption((option) =>
         option
           .setName("scramble-channel")
           .setRequired(true)
-          .setDescription("ID of the channel the bot will send scrambles to.")
+          .setDescription("ID of the channel the bot will send scrambles to")
           .addChannelTypes(ChannelType.GuildText)
       )
       .addChannelOption((option) =>
         option
           .setName("results-channel")
           .setRequired(true)
-          .setDescription("The channel the bot will send results to.")
+          .setDescription("The channel the bot will send results to")
           .addChannelTypes(ChannelType.GuildText)
       )
       .addChannelOption((option) =>
@@ -93,7 +93,7 @@ async function registerCommands(client) {
           .setName("submit-channel")
           .setRequired(true)
           .setDescription(
-            "The channel the bot will send the new week number to."
+            "The channel the bot will send the new week number to"
           )
           .addChannelTypes(ChannelType.GuildText)
       )
@@ -153,14 +153,14 @@ async function registerCommands(client) {
         option
           .setName("results-txt-file")
           .setDescription(
-            "Send a txt file with the podiums with the full results."
+            "Send a txt file with the podiums with the full results"
           )
           .setRequired(true)
       )
       .addIntegerOption((option) =>
         option
           .setName("start-week")
-          .setDescription("Initial week number for the next scrambles.")
+          .setDescription("Initial week number for the next scrambles")
           .setMinValue(1)
       )
       .addRoleOption((option) =>
@@ -175,7 +175,7 @@ async function registerCommands(client) {
 
     const addEventCommand = new SlashCommandBuilder()
       .setName("add-event")
-      .setDescription("Add an event to the competition")
+      .setDescription("[ADMIN] Add an event to the competition")
       .setDefaultMemberPermissions(PermissionsBitField.Flags.KickMembers)
       .addStringOption((option) =>
         option
@@ -210,12 +210,12 @@ async function registerCommands(client) {
       .addStringOption((option) =>
         option
           .setName("scramble-type")
-          .setDescription("The type of scramble to be sent.")
+          .setDescription("The type of scramble to be sent")
       );
 
     const removeEventCommand = new SlashCommandBuilder()
       .setName("remove-event")
-      .setDescription("Remove an event from the weekly comp")
+      .setDescription("[ADMIN] Remove an event from the weekly comp")
       .setDefaultMemberPermissions(PermissionsBitField.Flags.KickMembers)
       .addIntegerOption((option) =>
         option
@@ -226,20 +226,23 @@ async function registerCommands(client) {
 
     const setEventsJsonCommand = new SlashCommandBuilder()
       .setName("set-events-json")
-      .setDescription("Set the comp events with a json object.")
+      .setDescription("[ADMIN] Set the comp events with a json object")
       .setDefaultMemberPermissions(PermissionsBitField.Flags.KickMembers)
       .addStringOption((option) =>
         option
           .setName("json")
           .setRequired(true)
-          .setDescription("JSON object. Use /help to see how.")
+          .setDescription("JSON object. Use /help to see how")
       );
 
     const helpCommand = new SlashCommandBuilder()
       .setName("help")
-      .setDescription("Info on how to use the bot.");
+      .setDescription("Info on how to use the bot");
 
-    // Register
+    const stopCompCommand = new SlashCommandBuilder()
+      .setName("stop-comp")
+      .setDescription("[ADMIN] Stop comp, delete all results and settings")
+      .setDefaultMemberPermissions(PermissionsBitField.Flags.KickMembers);
 
     await client.application.commands.set([
       submitCommand,
@@ -253,8 +256,9 @@ async function registerCommands(client) {
       removeEventCommand,
       setEventsJsonCommand,
       helpCommand,
+      stopCompCommand,
     ]);
-    console.log("Slash commands registered successfully.");
+    console.log("Slash commands registered successfully");
   } catch (error) {
     console.error("Failed to register slash commands:", error);
   }
