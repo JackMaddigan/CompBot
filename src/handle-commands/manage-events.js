@@ -82,7 +82,7 @@ async function listEvents(int) {
     const path = `${int.guild.id}_events`;
     fs.writeFileSync(path, text);
     await int.reply({
-      content: text,
+      files: [path],
       flags: 64,
     });
     fs.unlinkSync(path);
