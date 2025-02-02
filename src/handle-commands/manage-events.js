@@ -1,6 +1,7 @@
 const { readData, saveData, deleteData } = require("../db");
 const { formats } = require("../formats");
 const scrambleArgs = require("../scramble-args.json");
+const fs = require("fs");
 
 async function addEvent(int) {
   const events = await readData(`SELECT * FROM events WHERE guild_id=?`, [
@@ -72,10 +73,20 @@ async function listEvents(int) {
       ? "This server has no events!"
       : JSON.stringify(events, null, 2);
 
-  await int.reply({
-    content: text,
-    flags: 64,
-  });
+  if (text.length <= 2000) {
+    await int.reply({
+      content: text,
+      flags: 64,
+    });
+  } else {
+    const path = `${int.guild.id}_events`;
+    fs.writeFileSync(path, text);
+    await int.reply({
+      content: text,
+      flags: 64,
+    });
+    fs.unlinkSync(path);
+  }
 }
 
 async function setEventsJson(int) {
