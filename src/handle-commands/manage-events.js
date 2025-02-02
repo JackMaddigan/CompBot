@@ -79,7 +79,7 @@ async function listEvents(int) {
       flags: 64,
     });
   } else {
-    const path = `${int.guild.id}_events`;
+    const path = `${int.guild.id}_events.txt`;
     fs.writeFileSync(path, text);
     await int.reply({
       files: [path],
